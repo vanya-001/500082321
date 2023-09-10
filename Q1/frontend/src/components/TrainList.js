@@ -4,40 +4,45 @@ import { getAllTrains } from "./Api";
 
 function TrainList() {
   const [trains, setTrains] = useState([]);
-  const [loading, setLoading] = useState(true); 
-  const [error, setError] = useState(null); 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     getAllTrains()
       .then((response) => {
-        console.log(response.data); 
+        console.log(response.data);
         setTrains(response.data);
-        setLoading(false); 
+        setLoading(false);
       })
       .catch((error) => {
         console.error(error);
-        setError(error); 
-        setLoading(false); 
+        setError(error);
+        setLoading(false);
       });
   }, []);
 
   return (
-    <div>
-      <h2>All Trains</h2>
+    <div className="container mx-auto">
+      <h2 className="text-2xl font-semibold mb-4">All Trains</h2>
       {loading ? (
-        <p>Loading...</p>
+        <p className="text-gray-600">Loading...</p>
       ) : error ? (
-        <p>Error: {error.message}</p>
+        <p className="text-red-500">Error: {error.message}</p>
       ) : (
         <ul>
           {Array.isArray(trains) && trains.length > 0 ? (
             trains.map((train) => (
-              <li key={train.trainNumber}>
-                <Link to={`/train/${train.trainNumber}`}>{train.trainName}</Link>
+              <li key={train.trainNumber} className="mb-2">
+                <Link
+                  to={`/train/${train.trainNumber}`}
+                  className="text-blue-500 hover:underline"
+                >
+                  {train.trainName}
+                </Link>
               </li>
             ))
           ) : (
-            <p>No train data available.</p>
+            <p className="text-gray-600">No train data available.</p>
           )}
         </ul>
       )}
