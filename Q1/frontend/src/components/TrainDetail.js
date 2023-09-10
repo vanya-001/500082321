@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getTrainById } from '../APIFetch/Api';
+import { getTrainByNumber } from './Api';
 
 function TrainDetail() {
   const { id } = useParams();
   const [train, setTrain] = useState({});
 
   useEffect(() => {
-    getTrainById(id)
+    getTrainByNumber(id)
       .then((response) => setTrain(response.data))
       .catch((error) => console.error(error));
   }, [id]);

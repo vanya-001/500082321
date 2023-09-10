@@ -1,42 +1,25 @@
-const axios = require('axios');
-const fs = require('fs');
+const express = require('express');
+const cors = require('cors');
+const axios = require('axios'); // Import Axios
+const app = express();
+const port = process.env.PORT || 5000;
 
-// Define the registration data
-const registrationData = {
-  companyName: "Train Central",
-  ownerName: "Ram",
-  rollNo: "1",
-  ownerEmail: "ram@abc.edu",
-  accessCode: "FKDLig"
-};
+app.use(cors());
 
-// Define the API endpoint URL
-const registrationURL = "http://20.244.56.144/train/register";
+const externalApiUrl = 'http://20.244.56.144/train/trains';
 
-// Make the POST request to register your company
-axios.post(registrationURL, registrationData)
-  .then(response => {
-    if (response.status === 200) {
-      // Registration was successful, retrieve the clientID and clientSecret
-      const registrationResult = response.data;
-      const clientID = registrationResult.clientID;
-      const clientSecret = registrationResult.clientSecret;
+app.get(externalApiUrl, async (req, res) => {
+  try {
+    const response = await axios.get(externalApiUrl);
 
-      console.log("Registration successful.");
-      console.log(`Client ID: ${clientID}`);
-      console.log(`Client Secret: ${clientSecret}`);
-      const credentials = {
-        clientID,
-        clientSecret
-      };
+    res.json(response.data);
+  } catch (error) {
 
-      fs.writeFileSync('credentials.json',JSON.stringify("Credentials saved to credentials.json"));
-    } else {
-      // Registration failed, print an error message
-      console.error("Company registration failed. Please check the data and try again.");
-    }
-  })
-  .catch(error => {
-    // Handle any errors that occurred during the request
-    console.error("An error occurred:", error);
-  });
+    console.error('Error fetching data from the external API:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
