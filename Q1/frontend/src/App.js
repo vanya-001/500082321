@@ -1,9 +1,12 @@
 import './App.css';
-import TrainSchedule from './components/TrainSchedule';
+import React from 'react';
+import Root from './Routes/Routes';
 
 function App() {
   return (
-    <TrainSchedule></TrainSchedule>
+    <div className='App'>
+      <Root></Root>
+    </div>
   );
 }
 
