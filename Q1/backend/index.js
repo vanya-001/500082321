@@ -1,4 +1,5 @@
 const axios = require('axios');
+const fs = require('fs');
 
 // Define the registration data
 const registrationData = {
@@ -24,6 +25,12 @@ axios.post(registrationURL, registrationData)
       console.log("Registration successful.");
       console.log(`Client ID: ${clientID}`);
       console.log(`Client Secret: ${clientSecret}`);
+      const credentials = {
+        clientID,
+        clientSecret
+      };
+
+      fs.writeFileSync('credentials.json',JSON.stringify("Credentials saved to credentials.json"));
     } else {
       // Registration failed, print an error message
       console.error("Company registration failed. Please check the data and try again.");
